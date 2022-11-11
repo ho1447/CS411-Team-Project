@@ -8,17 +8,43 @@
     },
     "basePath": "/api/v1",
     "paths": {
-        "/recipe": {
+        "/recipe/{id}": {
+            "get": {
+                "description": "Get recipe information based on given recipe id",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get recipe information",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Recipe ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.RecipeInfo"
+                        }
+                    }
+                }
+            }
+        },
+        "/recipes": {
             "get": {
                 "description": "Search recipe based on given query. Example /recipe?query=italian",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Search recipe",
+                "summary": "Search recipes",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "recipe search by natural language query i.e 'italian with egg'",
+                        "description": "Recipe search by natural language query i.e 'italian with egg'",
                         "name": "query",
                         "in": "query",
                         "required": true
@@ -36,6 +62,104 @@
         }
     },
     "definitions": {
+        "api.ExtendedIngredients": {
+            "type": "object",
+            "properties": {
+                "aisle": {
+                    "type": "string"
+                },
+                "amount": {
+                    "type": "number"
+                },
+                "consitency": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "measures": {
+                    "$ref": "#/definitions/api.Measures"
+                },
+                "meta": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "original": {
+                    "type": "string"
+                },
+                "originalName": {
+                    "type": "string"
+                },
+                "unit": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.Measures": {
+            "type": "object",
+            "properties": {
+                "metric": {
+                    "$ref": "#/definitions/api.Metric"
+                },
+                "us": {
+                    "$ref": "#/definitions/api.Metric"
+                }
+            }
+        },
+        "api.Metric": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "unitLong": {
+                    "type": "string"
+                },
+                "unitShort": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.ProductMatch": {
+            "type": "object",
+            "properties": {
+                "averageRating": {
+                    "type": "number"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "imageUrl": {
+                    "type": "string"
+                },
+                "link": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "string"
+                },
+                "ratingCount": {
+                    "type": "integer"
+                },
+                "score": {
+                    "type": "number"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "api.Recipe": {
             "type": "object",
             "properties": {
@@ -65,6 +189,141 @@
                 }
             }
         },
+        "api.RecipeInfo": {
+            "type": "object",
+            "properties": {
+                "aggregateLikes": {
+                    "type": "integer"
+                },
+                "analyzedInstructions": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": true
+                    }
+                },
+                "cheap": {
+                    "type": "boolean"
+                },
+                "creditsText": {
+                    "type": "string"
+                },
+                "cuisines": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "dairyFree": {
+                    "type": "boolean"
+                },
+                "diets": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "dishTypes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "extendedIngredients": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.ExtendedIngredients"
+                    }
+                },
+                "gaps": {
+                    "type": "string"
+                },
+                "glutenFree": {
+                    "type": "boolean"
+                },
+                "healthScore": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "imageType": {
+                    "type": "string"
+                },
+                "instructions": {
+                    "type": "string"
+                },
+                "ketogenic": {
+                    "type": "boolean"
+                },
+                "license": {
+                    "type": "string"
+                },
+                "lowFodmap": {
+                    "type": "boolean"
+                },
+                "occasions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "pricePerServing": {
+                    "type": "number"
+                },
+                "readyInMinutes": {
+                    "type": "integer"
+                },
+                "servings": {
+                    "type": "number"
+                },
+                "sourceName": {
+                    "type": "string"
+                },
+                "sourceUrl": {
+                    "type": "string"
+                },
+                "spoonacularScore": {
+                    "type": "number"
+                },
+                "spoonacularSourceUrl": {
+                    "type": "string"
+                },
+                "summary": {
+                    "type": "string"
+                },
+                "sustainable": {
+                    "type": "boolean"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "vegan": {
+                    "type": "boolean"
+                },
+                "vegetarian": {
+                    "type": "boolean"
+                },
+                "veryHealthy": {
+                    "type": "boolean"
+                },
+                "veryPopular": {
+                    "type": "boolean"
+                },
+                "weightWatcherSmartPoints": {
+                    "type": "number"
+                },
+                "whole30": {
+                    "type": "boolean"
+                },
+                "winePairing": {
+                    "$ref": "#/definitions/api.WinePairing"
+                }
+            }
+        },
         "api.RecipeSearchResp": {
             "type": "object",
             "properties": {
@@ -82,6 +341,26 @@
                 },
                 "totalResults": {
                     "type": "integer"
+                }
+            }
+        },
+        "api.WinePairing": {
+            "type": "object",
+            "properties": {
+                "pairedWines": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "pairingText": {
+                    "type": "string"
+                },
+                "productMatches": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.ProductMatch"
+                    }
                 }
             }
         }

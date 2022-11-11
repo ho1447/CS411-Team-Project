@@ -1,5 +1,69 @@
 basePath: /api/v1
 definitions:
+  api.ExtendedIngredients:
+    properties:
+      aisle:
+        type: string
+      amount:
+        type: number
+      consitency:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      measures:
+        $ref: '#/definitions/api.Measures'
+      meta:
+        items:
+          type: string
+        type: array
+      name:
+        type: string
+      original:
+        type: string
+      originalName:
+        type: string
+      unit:
+        type: string
+    type: object
+  api.Measures:
+    properties:
+      metric:
+        $ref: '#/definitions/api.Metric'
+      us:
+        $ref: '#/definitions/api.Metric'
+    type: object
+  api.Metric:
+    properties:
+      amount:
+        type: number
+      unitLong:
+        type: string
+      unitShort:
+        type: string
+    type: object
+  api.ProductMatch:
+    properties:
+      averageRating:
+        type: number
+      description:
+        type: string
+      id:
+        type: integer
+      imageUrl:
+        type: string
+      link:
+        type: string
+      price:
+        type: string
+      ratingCount:
+        type: integer
+      score:
+        type: number
+      title:
+        type: string
+    type: object
   api.Recipe:
     properties:
       calories:
@@ -19,6 +83,96 @@ definitions:
       title:
         type: string
     type: object
+  api.RecipeInfo:
+    properties:
+      aggregateLikes:
+        type: integer
+      analyzedInstructions:
+        items:
+          additionalProperties: true
+          type: object
+        type: array
+      cheap:
+        type: boolean
+      creditsText:
+        type: string
+      cuisines:
+        items:
+          type: string
+        type: array
+      dairyFree:
+        type: boolean
+      diets:
+        items:
+          type: string
+        type: array
+      dishTypes:
+        items:
+          type: string
+        type: array
+      extendedIngredients:
+        items:
+          $ref: '#/definitions/api.ExtendedIngredients'
+        type: array
+      gaps:
+        type: string
+      glutenFree:
+        type: boolean
+      healthScore:
+        type: number
+      id:
+        type: integer
+      image:
+        type: string
+      imageType:
+        type: string
+      instructions:
+        type: string
+      ketogenic:
+        type: boolean
+      license:
+        type: string
+      lowFodmap:
+        type: boolean
+      occasions:
+        items:
+          type: string
+        type: array
+      pricePerServing:
+        type: number
+      readyInMinutes:
+        type: integer
+      servings:
+        type: number
+      sourceName:
+        type: string
+      sourceUrl:
+        type: string
+      spoonacularScore:
+        type: number
+      spoonacularSourceUrl:
+        type: string
+      summary:
+        type: string
+      sustainable:
+        type: boolean
+      title:
+        type: string
+      vegan:
+        type: boolean
+      vegetarian:
+        type: boolean
+      veryHealthy:
+        type: boolean
+      veryPopular:
+        type: boolean
+      weightWatcherSmartPoints:
+        type: number
+      whole30:
+        type: boolean
+      winePairing:
+        $ref: '#/definitions/api.WinePairing'
+    type: object
   api.RecipeSearchResp:
     properties:
       number:
@@ -32,17 +186,47 @@ definitions:
       totalResults:
         type: integer
     type: object
+  api.WinePairing:
+    properties:
+      pairedWines:
+        items:
+          type: string
+        type: array
+      pairingText:
+        type: string
+      productMatches:
+        items:
+          $ref: '#/definitions/api.ProductMatch'
+        type: array
+    type: object
 info:
   contact: {}
   description: API for the team's project.
   title: CS411 API
   version: "1.0"
 paths:
-  /recipe:
+  /recipe/{id}:
+    get:
+      description: Get recipe information based on given recipe id
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.RecipeInfo'
+      summary: Get recipe information
+  /recipes:
     get:
       description: Search recipe based on given query. Example /recipe?query=italian
       parameters:
-      - description: recipe search by natural language query i.e 'italian with egg'
+      - description: Recipe search by natural language query i.e 'italian with egg'
         in: query
         name: query
         required: true
@@ -54,5 +238,5 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/api.RecipeSearchResp'
-      summary: Search recipe
+      summary: Search recipes
 swagger: "2.0"
