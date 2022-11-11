@@ -1,0 +1,58 @@
+basePath: /api/v1
+definitions:
+  api.Recipe:
+    properties:
+      calories:
+        type: number
+      carbs:
+        type: string
+      fat:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      imageType:
+        type: string
+      protein:
+        type: string
+      title:
+        type: string
+    type: object
+  api.RecipeSearchResp:
+    properties:
+      number:
+        type: integer
+      offset:
+        type: integer
+      results:
+        items:
+          $ref: '#/definitions/api.Recipe'
+        type: array
+      totalResults:
+        type: integer
+    type: object
+info:
+  contact: {}
+  description: API for the team's project.
+  title: CS411 API
+  version: "1.0"
+paths:
+  /recipe:
+    get:
+      description: Search recipe based on given query. Example /recipe?query=italian
+      parameters:
+      - description: recipe search by natural language query i.e 'italian with egg'
+        in: query
+        name: query
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.RecipeSearchResp'
+      summary: Search recipe
+swagger: "2.0"
