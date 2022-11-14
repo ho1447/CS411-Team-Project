@@ -1,0 +1,16 @@
+.btn{
+    text-align: center;
+    margin-top: 100px;
+  }
+  
+  .btn a {
+      font-family: Apple Chancery, cursive, sans-serif;
+      text-align: center;
+      text-decoration: none;
+      color: rgb(241, 233, 233);
+      background-color: rgb(32, 216, 26);
+      font-size: 30px;
+      padding: 20px;
+      border-radius: 25px;
+      transition-duration: 0.3s;
+    }
