@@ -1,21 +1,19 @@
 import React, { useRef } from 'react';
-import { Card, CardContent, Typography } from '@mui/material';
+import RecipeResult from './RecipeResult';
 
 const SearchBar = (props) => {
   const searchBarRef = useRef('');
   const [responseData, setResponseData] = React.useState('')
+  const [queryText, setQueryText] = React.useState('')
 
   // fetch recipes based on parameters
-  const fetchData = (query) => {
-    fetch("http://localhost:8080/api/v1/recipes", {
+  const fetchData = () => {
+    fetch("http://localhost:8080/api/v1/recipes?query=" + queryText, {
       method: "GET",
-      'params': {
-        'query':query,
-      },
     })
     .then((response) => response.json())
     .then((response)=>{
-        setResponseData(response.results)
+        setResponseData(response)
         console.log(response)
     })
     .catch((error) => {
@@ -27,31 +25,25 @@ const SearchBar = (props) => {
     <>
       <form
         onSubmit={(event) => {
+          fetchData();
           event.preventDefault();
           props.onSearchSubmit(searchBarRef.current.value);
-          fetchData(searchBarRef.current.value);
           searchBarRef.current.value = '';
         }}
       >
         <input
           type="text"
           className="search-bar"
-          id="search-bar"
+          id="search_bar"
           ref={searchBarRef}
+          onChange={event => setQueryText(event.target.value)}
           placeholder="Enter the recipe"
         />
         <input type="submit" placeholder="Submit" />
       </form>
 
       {/* map search results */}
-      {responseData && responseData.results?.map(data => (
-        <Card>
-          <CardContent>
-            <Typography color="text.secondary">Recipe</Typography>
-            <Typography variant="h5">{data.title}</Typography>
-          </CardContent>
-        </Card>
-      ))}
+      {responseData && <RecipeResult recipeData={responseData}/>}
     </>
   );
 };
