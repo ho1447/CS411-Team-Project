@@ -1,8 +1,10 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
 import SearchBar from './components/SearchBar';
-import { Typography, Modal, Box } from '@mui/material';
+import RecipeModal from './components/RecipeModal';
+import SavedRecipeDisplay from './components/SavedRecipeDisplay';
 import axios from 'axios';
+import './App.css';
 
 function App() {
   const CLIENT_ID = 'd514fdeb916e4b7a8824afea3a00c48b';
@@ -47,26 +49,17 @@ function App() {
       .get(`http://localhost:8080/api/v1/recipe/${recipeInfo.id}`)
       .then((res) => {
         setCurrentRecipe({
+          recipeID: recipeInfo.id,
           title: res.data.title,
           linkToImage: res.data.image,
           summary: res.data.summary,
         });
       });
-
     setOpenModal(true);
   };
 
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '80%',
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-  };
+  const [, updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
 
   return (
     <div className="App">
@@ -83,42 +76,43 @@ function App() {
           <button onClick={logout}>Logout</button>
         )}
 
-        {token ? (
-          <div className="App">
-            <SearchBar
-              onSearchSubmit={onSearchSubmit}
-              onRecipeClick={onRecipeClick}
+        {token && (
+          <div className="container">
+            <div className="search-bar-container">
+              <SearchBar
+                onSearchSubmit={onSearchSubmit}
+                onRecipeClick={onRecipeClick}
+              />
+            </div>
+
+            <RecipeModal
+              openModal={openModal}
+              setOpenModal={setOpenModal}
+              currentRecipe={currentRecipe}
+              setCurrentRecipe={setCurrentRecipe}
+              forceUpdate={forceUpdate}
             />
+            <div className="saved-recipe-container">
+              <SavedRecipeDisplay onRecipeClick={onRecipeClick} />
+            </div>
             <button
               onClick={() => {
-                alert(text);
+                axios
+                  .get('https://api.spotify.com/v1/search?q=egg&type=track', {
+                    headers: {
+                      Accept: 'application/json',
+                      'Content-Type': 'application/json',
+                      Authorization: `Bearer ${token}`,
+                    },
+                  })
+                  .then((res) => {
+                    console.log(res);
+                  });
               }}
             >
-              Hello
+              jfaskdfjkasdjfkladsf
             </button>
-
-            <Modal
-              open={openModal}
-              onClose={() => {
-                setOpenModal(false);
-                setCurrentRecipe({});
-              }}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={style}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                  {currentRecipe.title}
-                </Typography>
-                <img src={currentRecipe.linkToImage} alt="oops" />
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                  {currentRecipe.summary}
-                </Typography>
-              </Box>
-            </Modal>
           </div>
-        ) : (
-          <h2></h2>
         )}
       </header>
     </div>
