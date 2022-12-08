@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  flex-direction: row;
+}
+
+.search-bar-container {
+  flex: 1;
+}
+
+.saved-recipe-container {
+  flex: 1;
+}
