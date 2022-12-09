@@ -16,6 +16,38 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/getrecipes/{userID}": {
+            "get": {
+                "description": "Get saved recipes based on userID from MongoDB",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get saved recipes based on userID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "userID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.SavedRecipeResp"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.RespMessage"
+                        }
+                    }
+                }
+            }
+        },
         "/recipe/{id}": {
             "get": {
                 "description": "Get recipe information based on given recipe id",
@@ -37,6 +69,12 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/api.RecipeInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.RespMessage"
                         }
                     }
                 }
@@ -63,6 +101,48 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/api.RecipeSearchResp"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.RespMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/save/{userID}/{recipeID}": {
+            "post": {
+                "description": "Saves recipe based on userID and recipeID to MongoDB",
+                "summary": "Save user's saved recipe",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "userID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "recipeID",
+                        "name": "recipeID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.RespMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.RespMessage"
                         }
                     }
                 }
@@ -158,7 +238,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "ratingCount": {
-                    "type": "integer"
+                    "type": "number"
                 },
                 "score": {
                     "type": "number"
@@ -332,6 +412,23 @@ const docTemplate = `{
                 }
             }
         },
+        "api.RecipeMinimal": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "summary": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "api.RecipeSearchResp": {
             "type": "object",
             "properties": {
@@ -349,6 +446,25 @@ const docTemplate = `{
                 },
                 "totalResults": {
                     "type": "integer"
+                }
+            }
+        },
+        "api.RespMessage": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.SavedRecipeResp": {
+            "type": "object",
+            "properties": {
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.RecipeMinimal"
+                    }
                 }
             }
         },

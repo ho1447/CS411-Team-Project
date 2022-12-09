@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { db, colRef } from '../firebase-config';
-import { getDocs } from 'firebase/firestore';
 import SavedRecipe from './SavedRecipe';
 import { Typography } from '@mui/material';
+import axios from 'axios';
 
-const SavedRecipeDisplay = ({ onRecipeClick }) => {
+const SavedRecipeDisplay = ({ onRecipeClick, token }) => {
   useEffect(() => {
-    getDocs(colRef).then((res) => {
-      const saved = [];
-      res.docs.forEach((doc) => {
-        saved.push({ id: doc.id, ...doc.data() });
+    axios
+      .get(`http://localhost:8080/api/v1/getrecipes/${token}`)
+      .then((res) => {
+        console.log(res);
+        setSavedRecipes(res.data);
       });
-      setSavedRecipes(saved);
-    });
   }, []);
 
   const [savedRecipes, setSavedRecipes] = useState([]);

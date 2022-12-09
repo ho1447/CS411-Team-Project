@@ -11,11 +11,26 @@ type Recipe struct {
 	Protein   string  `json:"protein"`
 }
 
+type RecipeMinimal struct {
+	Id      int32  `json:"id"`
+	Title   string `json:"title"`
+	Image   string `json:"image"`
+	Summary string `json:"summary"`
+}
+
 type RecipeSearchResp struct {
 	Offset       int32    `json:"offset"`
 	Number       int32    `json:"number"`
 	Results      []Recipe `json:"results"`
 	TotalResults int32    `json:"totalResults"`
+}
+
+type RespMessage struct {
+	Message string `json:"message"`
+}
+
+type SavedRecipeResp struct {
+	Results []RecipeMinimal
 }
 
 type RecipeInfo struct {
