@@ -1,5 +1,20 @@
 
+<<<<<<< HEAD
 import {useEffect, useState} from "react";
+=======
+// const code = new URLSearchParams(window.location.search).get('code')
+
+// function App() {
+//   return (
+//     <div className="app">
+//       {code ? <Dashboard code={code} /> : <Login />}
+//     </div>
+//   );
+// }
+
+// export default App;
+import React, {useEffect, useState} from "react";
+>>>>>>> 590cd2f (checked auth and it seems like its working?)
 import './App.css';
 
 function App() {
