@@ -28,11 +28,6 @@ func NewClient(apiKey string) *Client {
 		panic(err)
 	}
 	println("Connected to MongoDB")
-	defer func() {
-		if err = client.Disconnect(context.TODO()); err != nil {
-			panic(err)
-		}
-	}()
 	return &Client{apiKey: apiKey, db: client}
 }
 
@@ -94,17 +89,17 @@ func (client *Client) GetRecipeInfo(id string) *RecipeInfo {
 	return output
 }
 
-func (client *Client) SaveUserRecipe(userID, recipeID string) error {
+func (client *Client) SaveUserRecipe(userID, recipeID string) (RespMessage, error) {
 	coll := client.db.Database("cs411db").Collection("savedrecipes")
 	newSaveEntry := db.UserRecipePair{UserID: userID, RecipeID: recipeID}
 	_, err := coll.InsertOne(context.TODO(), newSaveEntry)
 	if err != nil {
-		return err
+		return RespMessage{Message: "Error saving recipe"}, err
 	}
-	return nil
+	return RespMessage{Message: "Recipe saved!"}, nil
 }
 
-func (client *Client) GetUserSavedRecipes(userID string) {
+func (client *Client) GetUserSavedRecipes(userID string) *SavedRecipeResp {
 	coll := client.db.Database("cs411db").Collection("savedrecipes")
 	filter := bson.D{{"userID", userID}}
 	cursor, err := coll.Find(context.TODO(), filter)
@@ -115,8 +110,13 @@ func (client *Client) GetUserSavedRecipes(userID string) {
 	if err = cursor.All(context.TODO(), &results); err != nil {
 		log.Fatal(err)
 	}
+	output := SavedRecipeResp{}
 	for _, result := range results {
-		fmt.Println(result)
+		id := fmt.Sprintf("%v", result["recipeID"])
+		recipeInfo := client.GetRecipeInfo(id)
+		recipe := RecipeMinimal{Id: recipeInfo.Id, Title: recipeInfo.Title, Image: recipeInfo.Image, Summary: recipeInfo.Summary}
+		output.Results = append(output.Results, recipe)
 	}
+	return &output
 
 }

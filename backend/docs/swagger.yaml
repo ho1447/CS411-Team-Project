@@ -173,6 +173,17 @@ definitions:
       winePairing:
         $ref: '#/definitions/api.WinePairing'
     type: object
+  api.RecipeMinimal:
+    properties:
+      id:
+        type: integer
+      image:
+        type: string
+      summary:
+        type: string
+      title:
+        type: string
+    type: object
   api.RecipeSearchResp:
     properties:
       number:
@@ -185,6 +196,18 @@ definitions:
         type: array
       totalResults:
         type: integer
+    type: object
+  api.RespMessage:
+    properties:
+      message:
+        type: string
+    type: object
+  api.SavedRecipeResp:
+    properties:
+      results:
+        items:
+          $ref: '#/definitions/api.RecipeMinimal'
+        type: array
     type: object
   api.WinePairing:
     properties:
@@ -207,7 +230,7 @@ info:
 paths:
   /getrecipes/{userID}:
     get:
-      description: Get recipes based on userID
+      description: Get saved recipes based on userID from MongoDB
       parameters:
       - description: userID
         in: path
@@ -216,8 +239,16 @@ paths:
         type: string
       produces:
       - application/json
-      responses: {}
-      summary: Get saved recipe data from mongodb database
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.SavedRecipeResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.RespMessage'
+      summary: Get saved recipes based on userID
   /recipe/{id}:
     get:
       description: Get recipe information based on given recipe id
@@ -234,6 +265,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/api.RecipeInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.RespMessage'
       summary: Get recipe information
   /recipes:
     get:
@@ -251,10 +286,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/api.RecipeSearchResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.RespMessage'
       summary: Search recipes
   /save/{userID}/{recipeID}:
-    get:
-      description: Saves recipe based on userID and recipeID
+    post:
+      description: Saves recipe based on userID and recipeID to MongoDB
       parameters:
       - description: userID
         in: path
@@ -266,6 +305,14 @@ paths:
         name: recipeID
         required: true
         type: string
-      responses: {}
-      summary: Save recipe information to mongodb database
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.RespMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.RespMessage'
+      summary: Save user's saved recipe
 swagger: "2.0"
