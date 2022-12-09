@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react';
 import SearchBar from './components/SearchBar';
 import RecipeModal from './components/RecipeModal';
 import SavedRecipeDisplay from './components/SavedRecipeDisplay';
+import RecommendedSongsDisplay from './components/RecommendedSongsDisplay';
 import axios from 'axios';
 import './App.css';
+import { Typography } from '@mui/material';
 
 function App() {
   const CLIENT_ID = 'd514fdeb916e4b7a8824afea3a00c48b';
@@ -16,6 +18,7 @@ function App() {
   const [token, setToken] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [currentRecipe, setCurrentRecipe] = useState({});
+  const [recommendedSongList, setRecommendedSongList] = useState([]);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -42,6 +45,33 @@ function App() {
 
   const onSearchSubmit = (searchValue) => {
     setText(searchValue);
+    axios
+      .get(`https://api.spotify.com/v1/search?q=${searchValue}&type=track`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        const songList = res.data.tracks.items;
+        console.log(songList);
+        const recommended = [];
+        songList.forEach((song) => {
+          let artistString = '';
+          song.artists.forEach(({ name }) => {
+            artistString += name + ', ';
+          });
+          artistString = artistString.slice(0, -2);
+          recommended.push({
+            title: song.name,
+            artist: artistString,
+            imageURL: song.album.images[0].url,
+            songURL: song.external_urls.spotify,
+          });
+        });
+        setRecommendedSongList(recommended);
+      });
   };
 
   const onRecipeClick = (recipeInfo) => {
@@ -64,7 +94,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Spotify React</h1>
+        <h1 className="title">Spotify React</h1>
         {!token ? (
           //https://accounts.spotify.com/authorize?client_id=d514fdeb916e4b7a8824afea3a00c48b&response_type=token&redirect_uri=http://localhost:3000/&scope=streaming%20user-read-email%20user-read-private%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state
           <a
@@ -75,46 +105,34 @@ function App() {
         ) : (
           <button onClick={logout}>Logout</button>
         )}
-
-        {token && (
-          <div className="container">
-            <div className="search-bar-container">
-              <SearchBar
-                onSearchSubmit={onSearchSubmit}
-                onRecipeClick={onRecipeClick}
-              />
-            </div>
-
-            <RecipeModal
-              openModal={openModal}
-              setOpenModal={setOpenModal}
-              currentRecipe={currentRecipe}
-              setCurrentRecipe={setCurrentRecipe}
-              forceUpdate={forceUpdate}
-            />
-            <div className="saved-recipe-container">
-              <SavedRecipeDisplay onRecipeClick={onRecipeClick} />
-            </div>
-            <button
-              onClick={() => {
-                axios
-                  .get('https://api.spotify.com/v1/search?q=egg&type=track', {
-                    headers: {
-                      Accept: 'application/json',
-                      'Content-Type': 'application/json',
-                      Authorization: `Bearer ${token}`,
-                    },
-                  })
-                  .then((res) => {
-                    console.log(res);
-                  });
-              }}
-            >
-              jfaskdfjkasdjfkladsf
-            </button>
-          </div>
-        )}
       </header>
+      {token && (
+        <div className="container">
+          <div className="search-bar-container">
+            <Typography variant="h3">Search:</Typography>
+            <SearchBar
+              onSearchSubmit={onSearchSubmit}
+              onRecipeClick={onRecipeClick}
+            />
+          </div>
+          <RecipeModal
+            openModal={openModal}
+            setOpenModal={setOpenModal}
+            currentRecipe={currentRecipe}
+            setCurrentRecipe={setCurrentRecipe}
+            forceUpdate={forceUpdate}
+          />
+          <div className="divider" />
+          <div className="saved-recipe-container">
+            <SavedRecipeDisplay onRecipeClick={onRecipeClick} />
+          </div>
+          <div className="divider" />
+          <div className="recommended-songs-container">
+            <Typography variant="h3">Recommended Songs</Typography>
+            <RecommendedSongsDisplay songs={recommendedSongList} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
