@@ -1,13 +1,13 @@
 import React from 'react';
 import { Typography, Modal, Box, Button } from '@mui/material';
-import { setDoc, doc } from 'firebase/firestore';
-import { db } from '../firebase-config';
+import axios from 'axios';
 
 const RecipeModal = ({
   openModal,
   setOpenModal,
   setCurrentRecipe,
   currentRecipe,
+  token,
 }) => {
   const style = {
     position: 'absolute',
@@ -42,10 +42,16 @@ const RecipeModal = ({
         <Button
           variant="contained"
           onClick={() => {
-            setDoc(doc(db, 'savedRecipes', `${currentRecipe.recipeID}`), {
-              title: currentRecipe.title,
-              summary: currentRecipe.summary,
-            });
+            axios
+              .post(
+                `http://localhost:8080/api/v1/save/${token}/${currentRecipe.recipeID}`
+              )
+              .then((res) => {
+                console.log(res);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
           }}
         >
           Save

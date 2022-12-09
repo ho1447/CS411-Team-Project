@@ -90,10 +90,10 @@ function App() {
               setOpenModal={setOpenModal}
               currentRecipe={currentRecipe}
               setCurrentRecipe={setCurrentRecipe}
-              forceUpdate={forceUpdate}
+              token={token}
             />
             <div className="saved-recipe-container">
-              <SavedRecipeDisplay onRecipeClick={onRecipeClick} />
+              <SavedRecipeDisplay onRecipeClick={onRecipeClick} token={token} />
             </div>
             <button
               onClick={() => {
