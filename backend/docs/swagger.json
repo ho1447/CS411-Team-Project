@@ -104,6 +104,42 @@
                 }
             }
         },
+        "/save/remove/{userID}/{recipeID}": {
+            "post": {
+                "description": "Remove saved recipe based on userID and recipeID to MongoDB",
+                "summary": "Remove saved user's saved recipe",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "userID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "recipeID",
+                        "name": "recipeID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.RespMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.RespMessage"
+                        }
+                    }
+                }
+            }
+        },
         "/save/{userID}/{recipeID}": {
             "post": {
                 "description": "Saves recipe based on userID and recipeID to MongoDB",

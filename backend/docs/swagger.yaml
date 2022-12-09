@@ -315,4 +315,28 @@ paths:
           schema:
             $ref: '#/definitions/api.RespMessage'
       summary: Save user's saved recipe
+  /save/remove/{userID}/{recipeID}:
+    post:
+      description: Remove saved recipe based on userID and recipeID to MongoDB
+      parameters:
+      - description: userID
+        in: path
+        name: userID
+        required: true
+        type: string
+      - description: recipeID
+        in: path
+        name: recipeID
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.RespMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.RespMessage'
+      summary: Remove saved user's saved recipe
 swagger: "2.0"
