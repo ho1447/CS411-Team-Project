@@ -14,8 +14,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-const uri = "mongodb+srv://cs411-quang:quangcarried@cluster0.jxlibc0.mongodb.net/test"
-
 type Client struct {
 	apiKey string
 	db     *mongo.Client
