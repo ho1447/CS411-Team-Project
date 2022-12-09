@@ -4,6 +4,7 @@ import (
 	docs "CS411-Team-Project/backend/docs"
 	"CS411-Team-Project/backend/handlers"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"

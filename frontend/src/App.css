@@ -4,9 +4,27 @@
 }
 
 .search-bar-container {
-  flex: 1;
+  flex: 100;
 }
 
 .saved-recipe-container {
+  flex: 100;
+}
+
+.recommended-songs-container {
+  flex: 100;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+}
+
+.title {
+  margin-right: 3%;
+}
+
+.divider {
   flex: 1;
+  background-color: black;
 }
