@@ -45,3 +45,32 @@ func GetRecipeInfo(ctx *gin.Context) {
 	}
 	ctx.Data(http.StatusOK, gin.MIMEJSON, b)
 }
+
+// @Summary     Save recipe information to mongodb database
+// @Description Saves recipe based on userID and recipeID
+// @Param       userID path string true "userID"
+// @Param		recipeID path string true "recipeID"
+// @Router      /save/{userID}/{recipeID} [get]
+func RecipesSave(ctx *gin.Context) {
+	client := api.NewClient(os.Getenv("RECIPE_API_KEY")) // get API key fron env var
+	userID := ctx.Param("userID")
+	recipeID := ctx.Param("recipeID")
+	err := client.SaveUserRecipe(userID, recipeID)
+	if err != nil {
+		fmt.Println(err)
+		ctx.JSON(http.StatusInternalServerError, "")
+	}
+	ctx.JSON(http.StatusOK, "")
+}
+
+// @Summary     Get saved recipe data from mongodb database
+// @Description Get recipes based on userID
+// @Produce     json
+// @Param       userID path string true "userID"
+// @Router      /getrecipes/{userID} [get]
+func GetSavedRecipes(ctx *gin.Context) {
+	client := api.NewClient(os.Getenv("RECIPE_API_KEY")) // get API key fron env var
+	userID := ctx.Param("userID")
+	client.GetUserSavedRecipes(userID)
+	ctx.JSON(http.StatusOK, "")
+}

@@ -16,6 +16,25 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/getrecipes/{userID}": {
+            "get": {
+                "description": "Get recipes based on userID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get saved recipe data from mongodb database",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "userID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/recipe/{id}": {
             "get": {
                 "description": "Get recipe information based on given recipe id",
@@ -66,6 +85,29 @@ const docTemplate = `{
                         }
                     }
                 }
+            }
+        },
+        "/save/{userID}/{recipeID}": {
+            "get": {
+                "description": "Saves recipe based on userID and recipeID",
+                "summary": "Save recipe information to mongodb database",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "userID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "recipeID",
+                        "name": "recipeID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
             }
         }
     },
@@ -158,7 +200,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "ratingCount": {
-                    "type": "integer"
+                    "type": "number"
                 },
                 "score": {
                     "type": "number"

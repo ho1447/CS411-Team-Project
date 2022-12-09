@@ -58,7 +58,7 @@ definitions:
       price:
         type: string
       ratingCount:
-        type: integer
+        type: number
       score:
         type: number
       title:
@@ -205,6 +205,19 @@ info:
   title: CS411 API
   version: "1.0"
 paths:
+  /getrecipes/{userID}:
+    get:
+      description: Get recipes based on userID
+      parameters:
+      - description: userID
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get saved recipe data from mongodb database
   /recipe/{id}:
     get:
       description: Get recipe information based on given recipe id
@@ -239,4 +252,20 @@ paths:
           schema:
             $ref: '#/definitions/api.RecipeSearchResp'
       summary: Search recipes
+  /save/{userID}/{recipeID}:
+    get:
+      description: Saves recipe based on userID and recipeID
+      parameters:
+      - description: userID
+        in: path
+        name: userID
+        required: true
+        type: string
+      - description: recipeID
+        in: path
+        name: recipeID
+        required: true
+        type: string
+      responses: {}
+      summary: Save recipe information to mongodb database
 swagger: "2.0"

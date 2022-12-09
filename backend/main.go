@@ -41,6 +41,9 @@ func main() {
 	{
 		v1.GET("/recipes", handlers.SearchRecipes)
 		v1.GET("/recipe/:id", handlers.GetRecipeInfo)
+		v1.GET("/save/:userID/:recipeID", handlers.RecipesSave)
+		v1.GET("/getrecipes/:userID", handlers.GetSavedRecipes)
+
 	}
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	router.Run(":8080")
