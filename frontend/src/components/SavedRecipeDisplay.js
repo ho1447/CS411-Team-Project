@@ -18,9 +18,10 @@ const SavedRecipeDisplay = ({ onRecipeClick, token }) => {
   return (
     <div>
       <Typography variant="h3">Saved Recipies</Typography>
-      {savedRecipes.map((recipe) => {
-        return <SavedRecipe recipe={recipe} onRecipeClick={onRecipeClick} />;
-      })}
+      {savedRecipes &&
+        savedRecipes.map((recipe) => {
+          return <SavedRecipe recipe={recipe} onRecipeClick={onRecipeClick} />;
+        })}
     </div>
   );
 };

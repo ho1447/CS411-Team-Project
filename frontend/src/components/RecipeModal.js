@@ -7,6 +7,7 @@ const RecipeModal = ({
   setOpenModal,
   setCurrentRecipe,
   currentRecipe,
+  updateSaved,
   token,
 }) => {
   return (
@@ -48,6 +49,7 @@ const RecipeModal = ({
               )
               .then((res) => {
                 console.log(res);
+                // updateSaved();
               })
               .catch((err) => {
                 console.log(err);

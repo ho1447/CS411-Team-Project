@@ -11,7 +11,7 @@ import { Typography } from '@mui/material';
 function App() {
   const CLIENT_ID = 'd514fdeb916e4b7a8824afea3a00c48b';
   const REDIRECT_URI = 'http://localhost:3000/';
-  const AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
+  const AUTH_ENDPOINT = 'http://accounts.spotify.com/authorize';
   const RESPONSE_TYPE = 'token';
 
   const [text, setText] = useState('');
@@ -19,6 +19,7 @@ function App() {
   const [openModal, setOpenModal] = useState(false);
   const [currentRecipe, setCurrentRecipe] = useState({});
   const [recommendedSongList, setRecommendedSongList] = useState([]);
+  const [value, setValue] = useState(0);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -70,7 +71,11 @@ function App() {
             songURL: song.external_urls.spotify,
           });
         });
+        console.log(recommended);
         setRecommendedSongList(recommended);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -88,8 +93,9 @@ function App() {
     setOpenModal(true);
   };
 
-  const [, updateState] = React.useState();
-  const forceUpdate = React.useCallback(() => updateState({}), []);
+  function useForceUpdate() {
+    return setValue((value) => value + 1);
+  }
 
   return (
     <div className="App">
@@ -120,11 +126,12 @@ function App() {
             setOpenModal={setOpenModal}
             currentRecipe={currentRecipe}
             setCurrentRecipe={setCurrentRecipe}
-            forceUpdate={forceUpdate}
+            token={token}
+            updateSaved={useForceUpdate}
           />
           <div className="divider" />
           <div className="saved-recipe-container">
-            <SavedRecipeDisplay onRecipeClick={onRecipeClick} />
+            <SavedRecipeDisplay onRecipeClick={onRecipeClick} token={token} />
           </div>
           <div className="divider" />
           <div className="recommended-songs-container">

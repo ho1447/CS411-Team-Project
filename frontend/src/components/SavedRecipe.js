@@ -23,16 +23,6 @@ export default function SavedRecipe({ recipe, onRecipeClick }) {
           >
             Open
           </Button>
-          <Button
-            sx={{ backgroundColor: 'red' }}
-            variant="contained"
-            onClick={() => {
-              const docRef = doc(db, 'savedRecipes', `${recipe.id}`);
-              deleteDoc(docRef);
-            }}
-          >
-            Delete
-          </Button>
         </Box>
       </CardContent>
     </Card>
