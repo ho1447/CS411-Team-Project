@@ -1,8 +1,7 @@
 import { Button, Card, CardContent, Typography, Box } from '@mui/material';
-import { doc, deleteDoc } from 'firebase/firestore';
-import { db } from '../firebase-config';
+import axios from 'axios';
 
-export default function SavedRecipe({ recipe, onRecipeClick }) {
+export default function SavedRecipe({ recipe, onRecipeClick, token, update }) {
   return (
     <Card>
       <CardContent
@@ -22,6 +21,18 @@ export default function SavedRecipe({ recipe, onRecipeClick }) {
             }}
           >
             Open
+          </Button>
+          <Button
+            sx={{ backgroundColor: 'red' }}
+            variant="contained"
+            onClick={() => {
+              axios.post(
+                `http://localhost:8080/api/v1/save/remove/${token}/${recipe.id}`
+              );
+              update();
+            }}
+          >
+            Delete
           </Button>
         </Box>
       </CardContent>

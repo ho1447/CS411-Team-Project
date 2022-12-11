@@ -14,13 +14,25 @@ const SavedRecipeDisplay = ({ onRecipeClick, token }) => {
   }, []);
 
   const [savedRecipes, setSavedRecipes] = useState([]);
+  const [update, setUpdate] = useState(0);
+
+  const updateNumber = () => {
+    setUpdate((prev) => prev + 1);
+  };
 
   return (
     <div>
       <Typography variant="h3">Saved Recipies</Typography>
       {savedRecipes &&
         savedRecipes.map((recipe) => {
-          return <SavedRecipe recipe={recipe} onRecipeClick={onRecipeClick} />;
+          return (
+            <SavedRecipe
+              recipe={recipe}
+              onRecipeClick={onRecipeClick}
+              token={token}
+              update={updateNumber}
+            />
+          );
         })}
     </div>
   );
