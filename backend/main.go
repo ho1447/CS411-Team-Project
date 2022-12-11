@@ -44,6 +44,7 @@ func main() {
 		v1.GET("/recipe/:id", handlers.GetRecipeInfo)
 		v1.POST("/save/:userID/:recipeID", handlers.RecipesSave)
 		v1.GET("/getrecipes/:userID", handlers.GetSavedRecipes)
+		v1.POST("/save/remove/:userID/:recipeID", handlers.RemoveRecipesSaved)
 
 	}
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))

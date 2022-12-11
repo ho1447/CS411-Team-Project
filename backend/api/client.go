@@ -97,6 +97,16 @@ func (client *Client) SaveUserRecipe(userID, recipeID string) (RespMessage, erro
 	return RespMessage{Message: "Recipe saved!"}, nil
 }
 
+func (client *Client) RemoveSavedRecipe(userID, recipeID string) (RespMessage, error) {
+	coll := client.db.Database("cs411db").Collection("savedrecipes")
+	filter := bson.D{{"userID", userID}, {"recipeID", recipeID}}
+	_, err := coll.DeleteOne(context.TODO(), filter)
+	if err != nil {
+		return RespMessage{Message: "Error removing saved recipe"}, err
+	}
+	return RespMessage{Message: "Recipe unsaved!"}, nil
+}
+
 func (client *Client) GetUserSavedRecipes(userID string) *SavedRecipeResp {
 	coll := client.db.Database("cs411db").Collection("savedrecipes")
 	filter := bson.D{{"userID", userID}}
@@ -116,5 +126,4 @@ func (client *Client) GetUserSavedRecipes(userID string) *SavedRecipeResp {
 		output.Results = append(output.Results, recipe)
 	}
 	return &output
-
 }
